@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <title>Document</title>
+    <script>
+        let data = [];
+
+        function openForm() {
+            $('#addBtn').remove();
+            $('#form').css('display', '');
+        }
+
+        function submit() {
+            let name = $('input').val();
+            let location = '';
+            let locationQuery = $('select option:selected');
+            for (let i = 0; i < locationQuery.length; i++) {
+                if (i == locationQuery.length - 1) {
+                    location += $(locationQuery[i]).text();
+                } else {
+                    location += $(locationQuery[i]).text() + ',';
+                }
+            }
+            data.push({ name: name, location: location });
+            $('#message').css('padding', '10px 0');
+            $('#message').html('Added ' + '<strong>' + data.length + '</strong>' + ' User(s)');
+        }
+
+        function findAll() {
+            $('#message').html('');
+            $('#message').css('padding', '15px 0');
+            for (let item of data) {
+                $('#message').append('<div>' + item.name + ' ' + item.location + '</div>')
+            }
+        }
+
+        function findUsersByLocation() {
+            let locationQuery = $('select option:selected');
+            let result = [];
+            for (let i = 0; i < locationQuery.length; i++) {
+                let searchLocation = $(locationQuery[i]).text();
+                for (let j = 0; j < data.length; j++) {
+                    if (data[j].location.split(',').includes(searchLocation)) {
+                        result.push(data[j].name);
+                    }
+                }
+            }
+            $('#message').css('padding', '10px 0');
+            $('#message').text(result.join(', '));
+        }
+    </script>
+</head>
+
+<body>
+    <div id="addBtn" style="text-align: center;">
+        <button onclick="openForm()">Add</button>
+    </div>
+    <div id="message" style="color: green; font-size: 20px;"></div>
+    <div id="form" style="border: 1px solid blue; padding: 10px; display: none;">
+        <div style="display: grid; grid-template-columns: 140px 200px; gap: 10px; padding-bottom: 15px;">
+            <label for="name">Name</label>
+            <input type="text" />
+            <label for="location">Location</label>
+            <select name="location" id="location" multiple>
+                <option value="usa">USA</option>
+                <option value="canada">Canada</option>
+                <option value="italy">Italy</option>
+            </select>
+        </div>
+        <button onclick="submit()">Submit</button>
+        <button onclick="findAll()">Find All</button>
+        <button onclick="findUsersByLocation()">Find Users by Location</button>
+    </div>
+</body>
+
+</html>
