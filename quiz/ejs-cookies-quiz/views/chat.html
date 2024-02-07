@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <title>Chat</title>
+    <script>
+    </script>
+</head>
+
+<body>
+    <div style="text-align: right;">
+        Hello <strong>
+            <%= joiningUser %>
+        </strong>!!!
+    </div>
+    <div
+        style="border: 1px solid purple; border-radius: 15px; padding: 15px; display: grid; grid-template-columns: 150px auto; width: 800px;">
+        <div style="border: 1px solid palevioletred; padding: 10px;">
+            <% for (let chatItem of chat) { %>
+                <% if (chatItem.user !==joiningUser) { %>
+                    <form action="/chat">
+                        <input id="select-user" type="hidden" name="user" value="<%= chatItem.user %>" />
+                        <% if (chatItem.user===selectedUser) { %>
+                            <button style="border: none; background-color: grey;" type="submit">
+                                <%= chatItem.user %>
+                            </button>
+                            <% } else { %>
+                                <button style="border: none; background-color: none;" type="submit">
+                                    <%= chatItem.user %>
+                                </button>
+                                <% } %>
+                    </form>
+                    <% } %>
+                        <% } %>
+        </div>
+        <div style="border: 1px solid palevioletred; padding: 10px;">
+            <div>
+                <% for (let chatItem of chat) { %>
+                    <% if (chatItem.user===selectedUser) { %>
+                        <% for (let mess of chatItem.messagesToUser) { %>
+                            <p>
+                                <%= mess.sendUser %> ::: <%= mess.message %>
+                                        <%= mess.time %>
+                            </p>
+                            <% } %>
+                                <% } %>
+                                    <% } %>
+            </div>
+            <div>
+                <form action="/sendMessage" method="post">
+                    <input type="text" name="message" />
+                    <input type="hidden" name="user" value="<%= selectedUser %>" />
+                    <button type="submit">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
